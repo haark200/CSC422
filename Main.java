@@ -4,41 +4,60 @@ import java.util.List;
 import java.util.Random;
 
 /* Zombies and survivor class creations */
-class Players {
-    private int health;
+class Players <T extends Players<T>> {
+    private int currentHealth;
+    private int maxHealth;
     private int power;
+    private String name;
 
-    public Players(int health, int power) {
-        this.health = health;
+    public Players(int maxHealth, int power) {
+        this.maxHealth = maxHealth;
+        this.currentHealth = this.maxHealth;
         this.power = power;
     }
 
     public boolean isAlive() {
-        return health > 0;
+        return currentHealth > 0;
     }
 
     public int getPower() {
         return power;
     }
 
+    public int getMaxHealth() {
+        return this.maxHealth;
+    }
+
+    public int getcurrentHealth() {
+        return this.currentHealth;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void takeDamage(int damage) {
-        health -= damage;
-        if (health < 0) {
-            health = 0;
+        currentHealth -= damage;
+        if (currentHealth < 0) {
+            currentHealth = 0;
         }
     }
 }
 
 /* Extensions, creating player classes */
-class Zombies extends Players {
-    public Zombies(int health, int power) {
-        super(health, power);
+class Zombies extends Players<Zombies> {
+    public Zombies(int maxHealth, int power) {
+        super(maxHealth, power);
     }
 }
 
-class Survivors extends Players {
-    public Survivors(int health, int power) {
-        super(health, power);
+class Survivors extends Players <Survivors> {
+    public Survivors(int maxHealth, int power) {
+        super(maxHealth, power);
     }
 }
 
@@ -94,9 +113,18 @@ class ZombieWar {
 
     /* Simulate attacks metheod */
     public void simulate() {
+        int turnCounter = 0;
+        System.out.println("New combat started");
         while (!allSurvivorsDead() && !allZombiesDead()) {
+            System.out.println("Turn: " + turnCounter);
             attackPhase(survivors, zombies);
             attackPhase(zombies, survivors);
+            if (!allSurvivorsDead() && !allSurvivorsDead()) {
+                displayHPRemaning(survivors);
+                displayHPRemaning(zombies);
+                System.out.println();
+            }
+            turnCounter++;
         }
         results();
     }
@@ -134,9 +162,11 @@ class ZombieWar {
     }
 
     /* Attacks */
-    private void attackPhase(List<? extends Players> attackers, List<? extends Players> defenders) {
-        for (Players attacker : attackers) {
-            for (Players defender : defenders) {
+    private <T extends Players<T>> void attackPhase(List<? extends Players<?>> attackers, List<? extends Players<?>> defenders) {
+        for (Players<?> attacker : attackers) {
+            attacker.setName(attacker.getClass().getSimpleName() + attackers.indexOf(attacker));
+            for (Players<?> defender : defenders) {
+                defender.setName(defender.getClass().getSimpleName() + defenders.indexOf(defender));
                 attack(attacker, defender);
             }
             System.out.println();
@@ -144,13 +174,24 @@ class ZombieWar {
     }
 
     /* Prints for attacks */
-    private void attack(Players attacker, Players defender) {
+    private void attack(Players<?> attacker, Players<?> defender) {
         if (defender.isAlive()) {
             defender.takeDamage(attacker.getPower());
-            System.out.println(attacker.getPower() + " damage dealt.");
+            System.out.println("The " + attacker.getName() + " has attacked and dealt " + attacker.getPower() + " damage to " + defender.getName() + " " + defender.getcurrentHealth() + "/" + defender.getMaxHealth() + " health remaining");
             if (!defender.isAlive()) {
                 System.out.println("Defender killed.");
+                if (allSurvivorsDead()) {
+                displayHPRemaning(zombies);
+                } else if (allSurvivorsDead()) {
+                    displayHPRemaning(survivors);
+                }
             }
+        }
+    }
+
+    public void displayHPRemaning (List<? extends Players<?>> players) {
+        for (Players<?> player : players) {
+            System.out.println(player.getName() + ": " + player.getcurrentHealth() + "/" + player.getMaxHealth() + " health remaining");
         }
     }
 
@@ -197,7 +238,7 @@ class ZombieWar {
 /* Simulate */
 public class Main {
     public static void main(String[] args) {
-        ZombieWar apocalypse = new ZombieWar(2, 1);
+        ZombieWar apocalypse = new ZombieWar(4, 2);
         apocalypse.simulate();
     }
 }
