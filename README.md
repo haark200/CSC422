@@ -1,1 +1,1 @@
-# CSC422
+# CSC422 Zombie War Program
