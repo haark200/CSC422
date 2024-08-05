@@ -2,63 +2,43 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.Math;
 
 /* Zombies and survivor class creations */
-class Players <T extends Players<T>> {
-    private int currentHealth;
-    private int maxHealth;
+class Players {
+    private int health;
     private int power;
-    private String name;
 
-    public Players(int maxHealth, int power) {
-        this.maxHealth = maxHealth;
-        this.currentHealth = this.maxHealth;
+    public Players(int health, int power) {
+        this.health = health;
         this.power = power;
     }
 
     public boolean isAlive() {
-        return this.currentHealth > 0;
+        return health > 0;
     }
 
     public int getPower() {
         return power;
     }
 
-    public int getMaxHealth() {
-        return this.maxHealth;
-    }
-
-    public int getcurrentHealth() {
-        return this.currentHealth;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void takeDamage(int damage) {
-        currentHealth -= damage;
-        if (currentHealth < 0) {
-            currentHealth = 0;
+        health -= damage;
+        if (health < 0) {
+            health = 0;
         }
     }
 }
 
 /* Extensions, creating player classes */
-class Zombies extends Players<Zombies> {
-    public Zombies(int maxHealth, int power) {
-        super(maxHealth, power);
+class Zombies extends Players {
+    public Zombies(int health, int power) {
+        super(health, power);
     }
 }
 
-class Survivors extends Players <Survivors> {
-    public Survivors(int maxHealth, int power) {
-        super(maxHealth, power);
+class Survivors extends Players {
+    public Survivors(int health, int power) {
+        super(health, power);
     }
 }
 
@@ -114,17 +94,9 @@ class ZombieWar {
 
     /* Simulate attacks metheod */
     public void simulate() {
-        int turnCounter = 0;
         while (!allSurvivorsDead() && !allZombiesDead()) {
-            System.out.println("Turn: " + turnCounter);
             attackPhase(survivors, zombies);
             attackPhase(zombies, survivors);
-            if (!allSurvivorsDead() && !allSurvivorsDead()) {
-                displayHPRemaning(survivors);
-                displayHPRemaning(zombies);
-                System.out.println();
-            }
-            turnCounter++;
         }
         results();
     }
@@ -159,44 +131,21 @@ class ZombieWar {
                 zombies.add(tanks.get(tanks.size() - 1));
             }
         }
-        System.out.println("We have " + numSurvivors + " survivors trying to make it to safety. " + "(" + scientists.size() + " scientist, " + civilians.size() + " civilians, " + soldiers.size() + " soilders)");
-        System.out.println("But there are " + numZombies + " zombies waiting for them (" + commonInfecteds.size() + " common infected, " + tanks.size() + " tanks)");
     }
 
     /* Attacks */
-    private <T extends Players<T>> void attackPhase(List<? extends Players<?>> attackers, List<? extends Players<?>> defenders) {
-        for (Players<?> attacker : attackers) {
-            if (!attacker.isAlive()) 
-            continue;
-            attacker.setName(attacker.getClass().getSimpleName() + " " + attackers.indexOf(attacker));
-            for (Players<?> defender : defenders) {
-                if (!defender.isAlive()) 
-                continue;
-                defender.setName(defender.getClass().getSimpleName() + " " + defenders.indexOf(defender));
+    private void attackPhase(List<? extends Players> attackers, List<? extends Players> defenders) {
+        for (Players attacker : attackers) {
+            for (Players defender : defenders) {
                 attack(attacker, defender);
-                if (!attacker.isAlive()) 
-                break;
             }
-            System.out.println();
         }
     }
-    
 
     /* Prints for attacks */
-    private void attack(Players<?> attacker, Players<?> defender) {
-        if (!attacker.isAlive() || !defender.isAlive()) 
-        return;
-        defender.takeDamage(attacker.getPower());
-        System.out.println(attacker.getName() + " has attacked and dealt " + attacker.getPower() + " damage to " + defender.getName() + " " + defender.getcurrentHealth() + "/" + defender.getMaxHealth() + " health remaining");
-        if (!defender.isAlive()) {
-            System.out.println(attacker.getName() + " has killed " + defender.getName());
-        }
-    }
-    
-
-    public void displayHPRemaning (List<? extends Players<?>> players) {
-        for (Players<?> player : players) {
-            System.out.println(player.getName() + ": " + player.getcurrentHealth() + "/" + player.getMaxHealth() + " health remaining");
+    private void attack(Players attacker, Players defender) {
+        if (defender.isAlive()) {
+            defender.takeDamage(attacker.getPower());
         }
     }
 
@@ -225,19 +174,17 @@ class ZombieWar {
         int numSurvivorsMadeIt = 0;
         for (Survivors survivor : survivors) {
             if (survivor.isAlive()) {
-                numSurvivorsMadeIt++;
+                ++numSurvivorsMadeIt;
             }
         }
 
-        System.out.println("Initial Survivors: " + survivors.size());
-        System.out.println("Initial Zombies: " + zombies.size());
-        
+        System.out.println("We have " + survivors.size() + " survivors trying to make it to safety.");
+        System.out.println("But there are " + zombies.size() + " zombies waiting for them.");
+
         if (numSurvivorsMadeIt > 0) {
-            displayHPRemaning(survivors);
-            System.out.println("\nIt seems " + numSurvivorsMadeIt + " have made it to safety");
+            System.out.println("It seems" + numSurvivorsMadeIt + "have made it to safety.");
         } else {
-            displayHPRemaning(zombies);
-            System.out.println("\nNone of the survivors made it.");
+            System.out.println("None of the survivors made it.");
         }
     }
 }
@@ -245,9 +192,7 @@ class ZombieWar {
 /* Simulate */
 public class Main {
     public static void main(String[] args) {
-        ZombieWar apocalypse = new ZombieWar((int) (Math.random() * (20 - 1) + 1), (int) (Math.random() * (10 - 1) + 1));
+        ZombieWar apocalypse = new ZombieWar(2, 1);
         apocalypse.simulate();
     }
 }
-
-//Math.Random Code used from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random to generate random integers
