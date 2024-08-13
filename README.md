@@ -36,6 +36,35 @@ To test the program, you can run the program multiple times to see if the result
 
 ![UML Diagram](static/ZombieWar_UML.png)
 
+## Character Statistics
+
+### Humans
+
+| Character | Health | Attack |
+| --------- | ------ | ------ |
+| Civilian  | 50     | 5      |
+| Scientist | 20     | 2      |
+| Soldier   | 100    | 10     |
+
+### Zombies
+
+| Character      | Health | Attack |
+| -------------- | ------ | ------ |
+| Common Infected| 30     | 5      |
+| Tank           | 150    | 20     |
+
+## Weapon Statistics
+
+| Weapon          | Damage | Accuracy |
+| --------------- | ------ | -------- |
+| Pistol          | 10     | 80%      |
+| Shotgun         | 20     | 60%      |
+| Assault Rifle   | 30     | 40%      |
+| Submachine Gun  | 40     | 20%      |
+| Axe             | 50     | 10%      |
+| Crowbar         | 60     | 5%       |
+| Frying Pan      | 70     | 1%       |
+
 ## Change Log
 
 ### Release 1
