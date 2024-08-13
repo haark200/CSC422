@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Random;
 
 import src.main.java.characters.Player;
+import src.main.java.characters.PlayerPool;
 import src.main.java.characters.humans.*;
 import src.main.java.characters.zombies.*;
 
 public class ZombieWar {
-    private List<Zombie> zombies = new ArrayList<>();
-    private List<Survivor> survivors = new ArrayList<>();
+    private PlayerPool zombies = new PlayerPool();
+    private PlayerPool survivors = new PlayerPool();
 
     public ZombieWar(int numSurvivors, int numZombies) {
         generatePlayers(numSurvivors, numZombies);
@@ -19,8 +20,11 @@ public class ZombieWar {
     /* Simulate attacks metheod */
     public void simulate() {
         while (!allSurvivorsDead() && !allZombiesDead()) {
-            attackPhase(survivors, zombies);
-            attackPhase(zombies, survivors);
+            // Survivors attack first
+            attackPhase(survivors.getAlive(), zombies.getAlive());
+
+            // Zombies attack second
+            attackPhase(zombies.getAlive(), survivors.getAlive());
         }
         results();
     }
@@ -33,11 +37,11 @@ public class ZombieWar {
             int randomSurvivorType = rand.nextInt(3); // 0: Child, 1: Teacher, 2: Soldier
 
             if (randomSurvivorType == 0) {
-                survivors.add(new Scientist());
+                survivors.addPlayer(new Scientist());
             } else if (randomSurvivorType == 1) {
-                survivors.add(new Civilian());
+                survivors.addPlayer(new Civilian());
             } else {
-                survivors.add(new Soldier());
+                survivors.addPlayer(new Soldier());
             }
         }
 
@@ -45,60 +49,58 @@ public class ZombieWar {
             int randomZombieType = rand.nextInt(2); // 0: CommonInfected, 1: Tank
 
             if (randomZombieType == 0) {
-                zombies.add(new CommonInfected());
+                zombies.addPlayer(new CommonInfected());
             } else {
-                zombies.add(new Tank());
+                zombies.addPlayer(new Tank());
             }
         }
     }
 
     /* Attacks */
     private void attackPhase(List<? extends Player> attackers, List<? extends Player> defenders) {
+        List<Player> dead = new ArrayList<>();
         for (Player attacker : attackers) {
             for (Player defender : defenders) {
-                attack(attacker, defender);
+                attacker.attack(defender);
+                if (!defender.isAlive()) {
+                    dead.add(defender);
+                }
             }
         }
-    }
 
-    /* Prints for attacks */
-    private void attack(Player attacker, Player defender) {
-        if (defender.isAlive()) {
-            defender.takeDamage(attacker.getPower());
+        for (Player player : dead) {
+            if (player instanceof Survivor) {
+                survivors.removePlayer(player);
+            } else {
+                zombies.removePlayer(player);
+            }
         }
     }
 
     /* Check if zombies are alive */
     private boolean allZombiesDead() {
-        for (Zombie zombie : zombies) {
-            if (zombie.isAlive()) {
-                return false;
-            }
+        if (zombies.getAlive().size() == 0) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /* Check if survivors are alive */
     private boolean allSurvivorsDead() {
-        for (Survivor survivor : survivors) {
-            if (survivor.isAlive()) {
-                return false;
-            }
+        if (survivors.getAlive().size() == 0) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /* Print survivors */
     private void results() {
-        int numSurvivorsMadeIt = 0;
-        for (Survivor survivor : survivors) {
-            if (survivor.isAlive()) {
-                ++numSurvivorsMadeIt;
-            }
-        }
+        int numSurvivorsMadeIt = survivors.getAlive().size();
+        int survivorTotal = survivors.getAlive().size() + survivors.getDead().size();
+        int zombieTotal = zombies.getAlive().size() + zombies.getDead().size();        
 
-        System.out.println("We have " + survivors.size() + " survivors trying to make it to safety.");
-        System.out.println("But there are " + zombies.size() + " zombies waiting for them.");
+        System.out.println("We have " + survivorTotal + " survivor(s) trying to make it to safety.");
+        System.out.println("But there are " + zombieTotal + " zombie(s) waiting for them.");
 
         if (numSurvivorsMadeIt > 0) {
             System.out.println("It seems " + numSurvivorsMadeIt + " have made it to safety.");

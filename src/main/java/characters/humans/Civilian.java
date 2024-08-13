@@ -4,4 +4,9 @@ public class Civilian extends Survivor {
     public Civilian() {
         super(50,5);
     }
+
+    @Override
+    public String toString() {
+        return "Civilian";
+    }
 }
