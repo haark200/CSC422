@@ -8,12 +8,15 @@ import src.main.java.characters.Player;
 import src.main.java.characters.PlayerPool;
 import src.main.java.characters.humans.*;
 import src.main.java.characters.zombies.*;
+import src.main.java.weapons.WeaponCache;
 
 public class ZombieWar {
     private PlayerPool zombies = new PlayerPool();
     private PlayerPool survivors = new PlayerPool();
+    private WeaponCache weapons;
 
-    public ZombieWar(int numSurvivors, int numZombies) {
+    public ZombieWar(int numSurvivors, int numZombies, int numWeapons) {
+        weapons = new WeaponCache(numWeapons);
         generatePlayers(numSurvivors, numZombies);
     }
 
@@ -43,6 +46,12 @@ public class ZombieWar {
             } else {
                 survivors.addPlayer(new Soldier());
             }
+            // Give each survivor a weapon
+            if (weapons.getNumberOfWeapons() > 0) {
+                int randomWeaponIndex = rand.nextInt(weapons.getNumberOfWeapons());
+                Survivor survivor = (Survivor) survivors.getAlive().get(i);
+                survivor.equipWeapon(weapons.getWeapon(randomWeaponIndex));
+            }
         }
 
         for (int i = 0; i < numZombies; ++i) {
@@ -63,9 +72,12 @@ public class ZombieWar {
             for (Player defender : defenders) {
                 attacker.attack(defender);
                 if (!defender.isAlive()) {
-                    dead.add(defender);
+                    if (!dead.contains(defender)) {
+                        dead.add(defender);
+                    }
                 }
             }
+
         }
 
         for (Player player : dead) {
