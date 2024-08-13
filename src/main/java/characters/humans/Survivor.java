@@ -17,7 +17,6 @@ public class Survivor extends Player {
     @Override
     public void attack(Player defender) {
         if (defender.isAlive()) {
-            
             if (weapon != null) {
                 weapon.use(defender);
             } else {
