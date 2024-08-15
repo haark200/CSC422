@@ -57,8 +57,9 @@ public class WeaponCache {
         return weapons.size();
     }
 
-    public Weapon getWeapon(int weaponIndex) {
+    public Weapon takeWeapon() {
+        Random rand = new Random();
         // Remove and return the weapon at the specified index
-        return weapons.remove(weaponIndex);
+        return weapons.remove(rand.nextInt(weapons.size()));
     }
 }
