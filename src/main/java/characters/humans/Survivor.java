@@ -46,7 +46,7 @@ public class Survivor extends Player {
             defender.takeDamage(attacker.getPower());
             System.out.println(attacker.getName() + " has attacked with a " + this.getWeapon() + " and dealt " + attacker.getPower() + " damage to " + defender.getName() + " " + defender.getcurrentHealth() + "/" + defender.getMaxHealth() + " health remaining");
             if (!defender.isAlive()) {
-                System.out.println(attacker.getName() + " has killed " + defender.getName());
+                System.out.println(attacker.getName() + " has killed " + defender.getName() + " with " + this.weapon);
             } 
         } else 
             System.out.println(  attacker.getName() + " has missed the target with a " + this.getWeapon());
