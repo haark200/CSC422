@@ -2,7 +2,7 @@ package src.main.java.weapons;
 
 public class Axe extends Weapon {
     public Axe() {
-        super(50, 10);
+        super(50, 20);
     }
 
     @Override
