@@ -1,8 +1,10 @@
 package src.main.java.characters.zombies;
 
+import src.main.java.weapons.Fists;
+
 public class CommonInfected extends Zombie {
-    public CommonInfected() {
-        super(30,5);
+    public CommonInfected(int id) {
+        super(30, new Fists((5)), "Common Infected " + id);
     }
 
     @Override

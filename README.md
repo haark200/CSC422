@@ -10,20 +10,6 @@
 
 This project is a simulation of a zombie war. The program will generate a random number of survivors and zombies. The survivors will attack the zombies and the zombies will attack the survivors. The program will continue until all the zombies are dead or all the survivors are dead.
 
-## How to Run the Program
-
-To run the program, you will need to compile the program using the following command:
-
-```bash
-javac ZombieWar.java
-```
-
-After compiling the program, you can run the program using the following command:
-
-```bash
-java ZombieWar
-```
-
 ## How to Use the Program
 
 The program will generate a random number of survivors and zombies. The program will then simulate a battle between the survivors and the zombies. The program will continue until all the zombies are dead or all the survivors are dead. The program will then print out the results of the battle.
@@ -58,12 +44,14 @@ To test the program, you can run the program multiple times to see if the result
 | Weapon          | Damage | Accuracy |
 | --------------- | ------ | -------- |
 | Pistol          | 10     | 80%      |
-| Shotgun         | 20     | 60%      |
+| Shotgun         | 60     | 20%      |
 | Assault Rifle   | 30     | 40%      |
-| Submachine Gun  | 40     | 20%      |
-| Axe             | 50     | 10%      |
-| Crowbar         | 60     | 5%       |
-| Frying Pan      | 70     | 1%       |
+| Submachine Gun  | 20     | 40%      |
+| Axe             | 50     | 20%      |
+| Crowbar         | 20     | 25%      |
+| Frying Pan      | 15     | 30%      |
+| Rocket Launcher | 200    | 5%       |
+| Fists           | {var}  | 100%     |
 
 ## Change Log
 
