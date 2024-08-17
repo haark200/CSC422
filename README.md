@@ -44,13 +44,13 @@ To test the program, you can run the program multiple times to see if the result
 | Weapon          | Damage | Accuracy |
 | --------------- | ------ | -------- |
 | Pistol          | 10     | 80%      |
-| Shotgun         | 60     | 20%      |
-| Assault Rifle   | 30     | 40%      |
+| Shotgun         | 60     | 30%      |
+| Assault Rifle   | 30     | 60%      |
 | Submachine Gun  | 20     | 40%      |
-| Axe             | 50     | 20%      |
-| Crowbar         | 20     | 25%      |
-| Frying Pan      | 15     | 30%      |
-| Rocket Launcher | 200    | 5%       |
+| Axe             | 50     | 50%      |
+| Crowbar         | 20     | 65%      |
+| Frying Pan      | 15     | 70%      |
+| Rocket Launcher | 200    | 15%      |
 | Fists           | {var}  | 100%     |
 
 ## Change Log

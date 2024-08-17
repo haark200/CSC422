@@ -33,6 +33,7 @@ public class ZombieWar {
      * Survivors attack first, then zombies attack
      */
     public void simulate() {
+        int i = 1;
         System.out
                 .println("We have " + (scientists + civilians + soldiers) + " survivor(s) trying to make it to safety ("
                         + scientists + " scientists, " + civilians + " civilians, " + soldiers + " soldiers).");
@@ -40,11 +41,13 @@ public class ZombieWar {
                 + commonInfected + " common infected, " + tanks + " tanks).");
 
         while (!allSurvivorsDead() && !allZombiesDead()) {
+            System.out.println("\tTurn: " + i);
             // Survivors attack first
             attackPhase(survivors.getAlive(), zombies.getAlive());
 
             // Zombies attack second
             attackPhase(zombies.getAlive(), survivors.getAlive());
+            i++;
         }
         results();
     }
@@ -130,7 +133,7 @@ public class ZombieWar {
         int numSurvivorsMadeIt = survivors.getAlive().size();
 
         if (numSurvivorsMadeIt > 0) {
-            System.out.println("It seems " + numSurvivorsMadeIt + " have made it to safety.");
+            System.out.println("It seems " + numSurvivorsMadeIt + " survivors have made it to safety.");
         } else {
             System.out.println("None of the survivors made it.");
         }
