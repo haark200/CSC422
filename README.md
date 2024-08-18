@@ -74,3 +74,7 @@ We first implemented a working project that created an array of random character
 ### Release 2
 
 Attack logic was updated alongside print statements showing which characters were attacking who and how much damage was being done. Defender killed was printed when an attack brought someone to 0 health and survivor status printed after combat to see how many survived, if any.
+
+### Release 3
+
+Added weapons for the characters to be able to use, with associated chances to hit and damage unique to each weapon. Also, updated the way we organized our program as we put every class into separate files.
