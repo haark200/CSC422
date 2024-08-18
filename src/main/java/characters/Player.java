@@ -1,6 +1,5 @@
 package src.main.java.characters;
 
-import src.main.java.characters.humans.Survivor;
 import src.main.java.characters.zombies.Zombie;
 import src.main.java.weapons.Weapon;
 
@@ -28,13 +27,16 @@ public class Player {
         return health;
     }
 
-    public void takeDamage(Weapon weapon) {
+    public boolean takeDamage(Weapon weapon) {
+        boolean damageTaken = false;
         if (weapon.use()) {
             health -= weapon.getDamage();
+            damageTaken = true;
         }
         if (health < 0) {
             health = 0;
         }
+        return damageTaken;
     }
 
     public void equipWeapon(Weapon weapon) {
@@ -42,15 +44,14 @@ public class Player {
     }
 
     public void attack(Player defender) {
-        DEBUG = true;
         if (defender.isAlive()) {
-            if (this.weapon.use()) {
-                defender.takeDamage(this.weapon);
-                if (DEBUG) {
+            boolean tookDamage = defender.takeDamage(this.weapon);
+            if (DEBUG) {
+                if (tookDamage) {
                     System.out.println("\t\t" + this.name + " attacks " + defender.name + " with a(n) " + this.weapon + ": " + defender.name + " has " + defender.health + " health left");
-                } 
-            } else if (DEBUG) {
+                } else {
                     System.out.println("\t\t" + this.name + " has missed with the " + this.weapon + " against " + defender.name);
+                }
             }
             if (!defender.isAlive()) {
                 if (defender instanceof Zombie) {
