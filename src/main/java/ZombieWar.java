@@ -15,19 +15,39 @@ public class ZombieWar {
     private PlayerPool survivors = new PlayerPool();
     private WeaponCache weapons;
 
+    private int scientists = 0;
+    private int civilians = 0;
+    private int soldiers = 0;
+
+    private int commonInfected = 0;
+    private int tanks = 0;
+
     public ZombieWar(int numSurvivors, int numZombies, int numWeapons) {
         weapons = new WeaponCache(numWeapons);
         generatePlayers(numSurvivors, numZombies);
     }
 
-    /* Simulate attacks metheod */
+    /*
+     * Simulate the zombie war
+     * Display the number of survivors and zombies
+     * Survivors attack first, then zombies attack
+     */
     public void simulate() {
+        int i = 1;
+        System.out
+                .println("We have " + (scientists + civilians + soldiers) + " survivor(s) trying to make it to safety ("
+                        + scientists + " scientists, " + civilians + " civilians, " + soldiers + " soldiers).");
+        System.out.println("But there are " + (commonInfected + tanks) + " zombie(s) waiting for them ("
+                + commonInfected + " common infected, " + tanks + " tanks).");
+
         while (!allSurvivorsDead() && !allZombiesDead()) {
+            System.out.println("\tTurn: " + i);
             // Survivors attack first
             attackPhase(survivors.getAlive(), zombies.getAlive());
 
             // Zombies attack second
             attackPhase(zombies.getAlive(), survivors.getAlive());
+            i++;
         }
         results();
     }
@@ -40,17 +60,19 @@ public class ZombieWar {
             int randomSurvivorType = rand.nextInt(3); // 0: Child, 1: Teacher, 2: Soldier
 
             if (randomSurvivorType == 0) {
-                survivors.addPlayer(new Scientist());
+                survivors.addPlayer(new Scientist(i));
+                scientists += 1;
             } else if (randomSurvivorType == 1) {
-                survivors.addPlayer(new Civilian());
+                survivors.addPlayer(new Civilian(i));
+                civilians += 1;
             } else {
-                survivors.addPlayer(new Soldier());
+                survivors.addPlayer(new Soldier(i));
+                soldiers += 1;
             }
             // Give each survivor a weapon
             if (weapons.getNumberOfWeapons() > 0) {
-                int randomWeaponIndex = rand.nextInt(weapons.getNumberOfWeapons());
                 Survivor survivor = (Survivor) survivors.getAlive().get(i);
-                survivor.equipWeapon(weapons.getWeapon(randomWeaponIndex));
+                survivor.equipWeapon(weapons.takeWeapon());
             }
         }
 
@@ -58,9 +80,11 @@ public class ZombieWar {
             int randomZombieType = rand.nextInt(2); // 0: CommonInfected, 1: Tank
 
             if (randomZombieType == 0) {
-                zombies.addPlayer(new CommonInfected());
+                zombies.addPlayer(new CommonInfected(i));
+                commonInfected += 1;
             } else {
-                zombies.addPlayer(new Tank());
+                zombies.addPlayer(new Tank(i));
+                tanks += 1;
             }
         }
     }
@@ -77,7 +101,6 @@ public class ZombieWar {
                     }
                 }
             }
-
         }
 
         for (Player player : dead) {
@@ -108,14 +131,9 @@ public class ZombieWar {
     /* Print survivors */
     private void results() {
         int numSurvivorsMadeIt = survivors.getAlive().size();
-        int survivorTotal = survivors.getAlive().size() + survivors.getDead().size();
-        int zombieTotal = zombies.getAlive().size() + zombies.getDead().size();        
-
-        System.out.println("We have " + survivorTotal + " survivor(s) trying to make it to safety.");
-        System.out.println("But there are " + zombieTotal + " zombie(s) waiting for them.");
 
         if (numSurvivorsMadeIt > 0) {
-            System.out.println("It seems " + numSurvivorsMadeIt + " have made it to safety.");
+            System.out.println("It seems " + numSurvivorsMadeIt + " survivors have made it to safety.");
         } else {
             System.out.println("None of the survivors made it.");
         }

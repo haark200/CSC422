@@ -1,7 +1,4 @@
 package src.main.java.weapons;
-
-import src.main.java.characters.Player;
-
 public class Weapon {
     private int damage;
     private int accuracy;
@@ -19,16 +16,15 @@ public class Weapon {
         return accuracy;
     }
 
-    public void use(Player defender) {
-        if (defender.isAlive()) {
-            if (this.accuracy >= 100) {
-                defender.takeDamage(this.damage);
-            } else {
-                int random = (int) (Math.random() * 100);
-                if (random <= this.accuracy) {
-                    defender.takeDamage(this.damage);
-                }
+    public boolean use() {
+        if (this.accuracy >= 100) {
+            return true;
+        } else {
+            int random = (int) (Math.random() * 100);
+            if (random <= this.accuracy) {
+                return true;
             }
         }
+        return false;
     }
 }

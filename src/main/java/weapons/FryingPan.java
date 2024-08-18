@@ -2,7 +2,7 @@ package src.main.java.weapons;
 
 public class FryingPan extends Weapon {
     public FryingPan() {
-        super(70, 1);
+        super(15, 70);
     }
 
     @Override

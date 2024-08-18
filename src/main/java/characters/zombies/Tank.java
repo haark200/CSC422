@@ -1,8 +1,10 @@
 package src.main.java.characters.zombies;
 
+import src.main.java.weapons.Fists;
+
 public class Tank extends Zombie {
-    public Tank() {
-        super(150, 20);
+    public Tank(int id) {
+        super(150, new Fists(20), "Tank " + id);
     }
 
     @Override

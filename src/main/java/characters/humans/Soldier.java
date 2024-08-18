@@ -1,8 +1,10 @@
 package src.main.java.characters.humans;
 
+import src.main.java.weapons.Fists;
+
 public class Soldier extends Survivor {
-    public Soldier() {
-        super(100, 10);
+    public Soldier(int id) {
+        super(100, new Fists((10)), "Soldier " + id);
     }
 
     @Override

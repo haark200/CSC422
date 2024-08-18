@@ -11,6 +11,10 @@ public class WeaponCache {
         generateWeapons(numberOfWeapons);
     }
 
+    /*
+     * Generate a random number of weapons and add them to the cache
+     * @param numberOfWeapons
+     */
     private void generateWeapons(int numberOfWeapons) {
         Random rand = new Random();
         for (int i = 0; i < numberOfWeapons; i++) {
@@ -22,8 +26,9 @@ public class WeaponCache {
              * 4: AssualtRifle
              * 5: Axe
              * 6: Crowbar
+             * 7: RocketLauncher
              */
-            int randomWeaponType = rand.nextInt(7);
+            int randomWeaponType = rand.nextInt(8);
 
             switch (randomWeaponType) {
                 case 0:
@@ -47,18 +52,29 @@ public class WeaponCache {
                 case 6:
                     weapons.add(new Crowbar());
                     break;
+                case 7:
+                    weapons.add(new RocketLauncher());
+                    break;
                 default:
                     break;
             }
         }
     }
 
+    /*
+     * Get the number of weapons in the cache
+     * @return int
+     */
     public int getNumberOfWeapons() {
         return weapons.size();
     }
 
-    public Weapon getWeapon(int weaponIndex) {
-        // Remove and return the weapon at the specified index
-        return weapons.remove(weaponIndex);
+    /*
+     * Randomly select a weapon from the cache and remove it
+     * @return Weapon
+     */
+    public Weapon takeWeapon() {
+        Random rand = new Random();
+        return weapons.remove(rand.nextInt(weapons.size()));
     }
 }
